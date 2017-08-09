@@ -1,23 +1,23 @@
-﻿<div class="container" ng-app="incidentApp" ng-controller="IncidentController">
+﻿<div class="container" ng-controller="IncidentController">
     <h1>Incident Report</h1>
     <div class="row">
         <div class="col-xs-12">
-            <textarea rows="4" class="form-control" placeholder="Describe the incident"></textarea>
+            <textarea rows="4" ng-model="Data.Description" class="form-control" placeholder="Describe the incident"></textarea>
         </div>
     </div>
     <div class="row">
         <div class="col-xs-12">
-            <input type="text" class="form-control" placeholder="Location of the incident" />
+            <input type="text" ng-model="Data.Location" class="form-control" placeholder="Location of the incident" />
         </div>
     </div>
     <div class="row">
         <div class="col-xs-12">
-            <select class="form-control"> </select>
+            <select class="form-control" ng-model="Data.Category" ng-options="category.key as category.value for category in somecat"></select>
         </div>
     </div>
     <div class="row">
         <div class="col-xs-6">
-            <label class="form-control">Currently Active:<input type="checkbox"/></label>
+            <label class="form-control">Currently Active:<input type="checkbox" ng-model="Data.Active"/></label>
         </div>
         <div class="col-xs-6">
             <label class="form-control" >Add Log:<input type="checkbox" ng-model="someboolean"/></label>
@@ -25,12 +25,12 @@
     </div>
     <div class="row" ng-show="someboolean">
         <div class="col-xs-12">
-            <input type="text" class="form-control" placeholder="Log"/>
+            <input type="text" ng-model="Data.LogContent" class="form-control" placeholder="Log" />
         </div>
     </div>
     <div class="row">
         <div class="col-xs-12">
-         <button class="btn btn-success form-control">Send Incident Report</button>
+         <button class="btn btn-success form-control" ng-click="SendData(Data)">Send Incident Report</button>
         </div>
     </div>
 </div>

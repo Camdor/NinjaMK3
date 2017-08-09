@@ -8,6 +8,7 @@ using MiniNinja.Models;
 
 namespace MiniNinja.Controllers
 {
+    [Authorize]
     public class ValuesController : ApiController
     {
         ApplicationDbContext ctx = new ApplicationDbContext();
@@ -24,8 +25,25 @@ namespace MiniNinja.Controllers
         }
 
         // POST api/values
-        public void Post([FromBody]string value)
+        public void Post([FromBody]RegisterIncident Data)
         {
+            Incident incident = new Incident();
+            incident.Description = Data.Description;
+            incident.Location = Data.Location;
+            incident.Category = Data.Category;
+            incident.Active = Data.Active;
+            incident.TimeStamp = DateTime.Now;
+            incident.Logs = new List<Log>();
+
+            if (!String.IsNullOrEmpty(Data.LogContent))
+            {
+                Log log = new Log { Content = Data.LogContent, TimeStamp = DateTime.Now, Incident = incident };
+                incident.Logs.Add(log);
+            }
+
+            ctx.Incidents.Add(incident);
+            ctx.SaveChanges();
+            //Continue
         }
 
         // PUT api/values/5
