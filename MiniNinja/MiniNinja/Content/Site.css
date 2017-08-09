@@ -13,5 +13,9 @@
 input,
 select,
 textarea {
-    max-width: 280px;
+    margin-bottom:10px;
+}
+
+input[type=checkbox] {
+  transform: scale(1.5);
 }

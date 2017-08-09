@@ -4,16 +4,17 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using MiniNinja.Models;
 
 namespace MiniNinja.Controllers
 {
-    [Authorize]
     public class ValuesController : ApiController
     {
+        ApplicationDbContext ctx = new ApplicationDbContext();
         // GET api/values
-        public IEnumerable<string> Get()
+        public IEnumerable<Incident> Get()
         {
-            return new string[] { "value1", "value2" };
+            return ctx.Incidents.Include("Author").ToList();
         }
 
         // GET api/values/5
