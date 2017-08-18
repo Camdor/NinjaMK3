@@ -16,6 +16,18 @@ app.controller("IncidentController", ["$scope", "$http", "$window", function ($s
         $http.post('/api/Values', data, config).then(function (response) { console.log(response) }, function (response) { alert("AFUERA"); });
     }
 
+    $scope.getAllIncidents = function () {
+        var token = $window.sessionStorage.getItem('tokenKey');
+        var headers = {};
+        if (token) {
+            headers.Authorization = 'Bearer ' + token;
+        }
+        var config = { headers: headers };
+        $http.get('/api/Values', config).then(function (response) {
+            console.log(JSON.parse(JSON.stringify(response.data)));
+        })
+    }
+
 }]);
 
 app.controller("AccountController", ["$scope", "$http", '$window', function ($scope, $http, $window) {
@@ -34,10 +46,11 @@ app.controller("AccountController", ["$scope", "$http", '$window', function ($sc
     $scope.LogIn = function () {
         var data = "grant_type=password&username=" + $scope.login.Email + "&password=" + $scope.login.Password;
         $http.post('/Token', data).then(function (promise) {
+            console.log(promise);
             $scope.user = data.userName;
             $window.sessionStorage.setItem('tokenKey', promise.data.access_token);
             $scope.login.Password = '';
-        })
+        }, function (promise) { console.log(promise);})
     }
 
 

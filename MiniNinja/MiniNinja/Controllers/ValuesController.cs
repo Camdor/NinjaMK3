@@ -8,14 +8,33 @@ using MiniNinja.Models;
 
 namespace MiniNinja.Controllers
 {
-    [Authorize]
+    [Authorize
+        ]
     public class ValuesController : ApiController
     {
         ApplicationDbContext ctx = new ApplicationDbContext();
         // GET api/values
-        public IEnumerable<Incident> Get()
+        public IEnumerable<IncidentVM> Get()
         {
-            return ctx.Incidents.Include("Author").ToList();
+            var data = ctx.Incidents.Include("Logs").Include("Author").ToList();
+            List<IncidentVM> incidents = new List<IncidentVM>();
+            foreach (Incident incident in data)
+            {
+                IncidentVM currentIncident = new IncidentVM();
+                currentIncident.Location = incident.Location;
+                currentIncident.Description = incident.Description;
+                currentIncident.Active= incident.Active;
+                currentIncident.TimeStamp = incident.TimeStamp;
+                currentIncident.Category = incident.Category;
+                currentIncident.Author = incident.Author.Email;
+                currentIncident.Logs = new List<LogInIncident>();
+                foreach(Log log in incident.Logs)
+                {
+                    currentIncident.Logs.Add(new LogInIncident { Content = log.Content, Author = log.Author.Email, TimeStamp = log.TimeStamp });
+                }
+                incidents.Add(currentIncident);
+            }
+            return incidents;
         }
 
         // GET api/values/5
